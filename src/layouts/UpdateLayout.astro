@@ -13,6 +13,8 @@ interface Props {
 
 const { entry, related = [] } = Astro.props;
 const areaLine = entry.data.areas.map((area) => AREA_META[area].label).join(' / ');
+const coverSrc = getEntryCover(entry);
+const isGeneratedCover = coverSrc.includes('/previews/');
 ---
 
 <BaseLayout
@@ -39,8 +41,14 @@ const areaLine = entry.data.areas.map((area) => AREA_META[area].label).join(' / 
             <p class="article-summary">{entry.data.summary}</p>
           </div>
 
-          <figure class="article-cover article-cover--editorial">
-            <img src={getEntryCover(entry)} alt={entry.data.title} loading="eager" />
+          <figure
+            class:list={[
+              'article-cover',
+              'article-cover--editorial',
+              isGeneratedCover && 'article-cover--generated',
+            ]}
+          >
+            <img src={coverSrc} alt={entry.data.title} loading="eager" />
           </figure>
         </header>
 
