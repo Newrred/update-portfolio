@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { AREA_META, type AreaSlug } from '../data/site';
+import { withBase } from './paths';
 
 export type UpdateEntry = CollectionEntry<'updates'>;
 
@@ -13,11 +14,11 @@ export function sortUpdates(entries: UpdateEntry[]) {
 }
 
 export function getEntryUrl(entry: UpdateEntry) {
-  return `/updates/${entry.id}/`;
+  return withBase(`/updates/${entry.id}/`);
 }
 
 export function getEntryCover(entry: UpdateEntry) {
-  return entry.data.cover ?? '/previews/default.svg';
+  return withBase(entry.data.cover ?? '/previews/default.svg');
 }
 
 export function getEntryCredit(entry: UpdateEntry) {

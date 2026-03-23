@@ -1,5 +1,6 @@
 import { siteConfig } from '../data/site';
 import { getEntryUrl, getPublishedUpdates } from '../utils/updates';
+import { withBase } from '../utils/paths';
 
 function escapeXml(value: string) {
   return value
@@ -17,10 +18,11 @@ function toRfc822(value: string) {
 
 export async function GET() {
   const updates = await getPublishedUpdates();
+  const homeLink = new URL(withBase('/'), siteConfig.url).toString();
 
   const items = updates
     .map((entry) => {
-      const link = `${siteConfig.url}${getEntryUrl(entry)}`;
+      const link = new URL(getEntryUrl(entry), siteConfig.url).toString();
 
       return `
         <item>
@@ -38,7 +40,7 @@ export async function GET() {
 <rss version="2.0">
   <channel>
     <title>${escapeXml(siteConfig.owner)} update feed</title>
-    <link>${siteConfig.url}</link>
+    <link>${homeLink}</link>
     <description>${escapeXml(siteConfig.description)}</description>
     <language>ko-KR</language>
     ${items}

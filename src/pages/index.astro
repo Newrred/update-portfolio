@@ -4,6 +4,7 @@ import CredentialsPanel from '../components/CredentialsPanel.astro';
 import LiveClockStrip from '../components/LiveClockStrip.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteConfig } from '../data/site';
+import { withBase } from '../utils/paths';
 import { formatDate, getEntryUrl, getPublishedUpdates, summarizeAreas } from '../utils/updates';
 
 const updates = await getPublishedUpdates();
@@ -11,7 +12,7 @@ const latest = updates.slice(0, 8);
 const pinned = updates.filter((entry) => entry.data.pinned).slice(0, 4);
 const areas = summarizeAreas(updates);
 const current = updates[0] ?? null;
-const currentHref = current ? getEntryUrl(current) : '/archive/';
+const currentHref = current ? getEntryUrl(current) : withBase('/archive/');
 ---
 
 <BaseLayout
@@ -33,7 +34,7 @@ const currentHref = current ? getEntryUrl(current) : '/archive/';
       <div class="hero-assembly__intro">
         <p class="hero-assembly__kicker mono-text">{siteConfig.siteTitle}</p>
         <div class="hero-assembly__mark" aria-hidden="true">
-          <img src="/media/8.png" alt="" loading="eager" />
+          <img src={withBase('/media/8.png')} alt="" loading="eager" />
         </div>
         <h1 class="sr-only">
           <span>{siteConfig.owner}</span>
@@ -48,7 +49,7 @@ const currentHref = current ? getEntryUrl(current) : '/archive/';
             <a href={currentHref}>{current ? `${current.data.title} 보기` : '아카이브 보기'}</a>
           </li>
           <li>
-            <a href="/archive/">전체 기록 탐색</a>
+            <a href={withBase('/archive/')}>전체 기록 탐색</a>
           </li>
         </ul>
 
@@ -99,7 +100,7 @@ const currentHref = current ? getEntryUrl(current) : '/archive/';
       <div class="hero-assembly__archive">
         <div class="hero-assembly__archive-head">
           <p class="mono-text">latest ledger</p>
-          <a href="/archive/">full archive</a>
+          <a href={withBase('/archive/')}>full archive</a>
         </div>
         <ArchiveMatrix entries={latest} showFilters={true} nested={true} />
       </div>
@@ -151,7 +152,7 @@ const currentHref = current ? getEntryUrl(current) : '/archive/';
                 areas.map((area) => (
                   <tr>
                     <td>
-                      <a href={`/areas/${area.slug}/`}>{area.label}</a>
+                      <a href={withBase(`/areas/${area.slug}/`)}>{area.label}</a>
                     </td>
                     <td>{area.latest ? area.latest.data.build : '-'}</td>
                     <td>{area.count}</td>
@@ -166,7 +167,7 @@ const currentHref = current ? getEntryUrl(current) : '/archive/';
       <section class="dashboard-grid__records">
         <div class="section-head section-head--tight">
           <h2>대표 기록</h2>
-          <a href="/archive/">전체 보기</a>
+          <a href={withBase('/archive/')}>전체 보기</a>
         </div>
 
         <ul class="entry-list entry-list--compact feature-list">

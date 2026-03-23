@@ -3,6 +3,7 @@ import ArchiveMatrix from '../../components/ArchiveMatrix.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { AREA_META, type AreaSlug } from '../../data/site';
 import { getPublishedUpdates } from '../../utils/updates';
+import { withBase } from '../../utils/paths';
 
 export async function getStaticPaths() {
   const updates = await getPublishedUpdates();
@@ -28,7 +29,7 @@ const updates = (await getPublishedUpdates()).filter((entry) =>
 >
   <section class="page-section">
     <div class="container container--wide page-head">
-      <a class="back-link" href="/archive/">아카이브로 돌아가기</a>
+      <a class="back-link" href={withBase('/archive/')}>아카이브로 돌아가기</a>
       <h1>{meta.label}</h1>
       <p class="lead">{meta.description}</p>
     </div>

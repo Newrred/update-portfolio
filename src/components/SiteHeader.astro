@@ -1,24 +1,26 @@
 ---
 import { NAV_ITEMS, siteConfig } from '../data/site';
+import { stripBase, withBase } from '../utils/paths';
 
 interface Props {
   currentPath?: string;
 }
 
 const { currentPath = '/' } = Astro.props;
+const normalizedCurrentPath = stripBase(currentPath);
 
 function isActive(href: string) {
   if (href === '/') {
-    return currentPath === '/';
+    return normalizedCurrentPath === '/';
   }
 
-  return currentPath.startsWith(href);
+  return normalizedCurrentPath.startsWith(href);
 }
 ---
 
 <header class="site-header">
   <div class="container container--wide topbar">
-    <a class="brand" href="/">
+    <a class="brand" href={withBase('/')}>
       <strong>{siteConfig.owner}</strong>
       <span>{siteConfig.roleLine}</span>
     </a>
@@ -26,7 +28,7 @@ function isActive(href: string) {
     <nav class="site-nav" aria-label="주요 이동">
       {
         NAV_ITEMS.map((item) => (
-          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+          <a href={withBase(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
             {item.label}
           </a>
         ))

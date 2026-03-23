@@ -169,3 +169,31 @@ public/
 ```bash
 PUBLIC_SITE_URL=https://your-domain.com npm run build
 ```
+
+## GitHub Pages 배포
+
+이 저장소 이름이 `update-portfolio`이고 GitHub 계정이 `Newrred`라면 배포 주소는 아래가 됩니다.
+
+```text
+https://newrred.github.io/update-portfolio/
+```
+
+이 프로젝트에는 GitHub Pages용 워크플로가 이미 들어 있습니다.
+
+- `.github/workflows/deploy.yml`
+- `astro.config.mjs`
+
+처음 배포할 때는 GitHub에서 아래만 하면 됩니다.
+
+1. 저장소를 GitHub에 push
+2. GitHub 저장소 열기
+3. `Settings > Pages`로 이동
+4. `Source`를 `GitHub Actions`로 선택
+5. `Actions` 탭에서 `Deploy to GitHub Pages` 실행 확인
+6. 배포 완료 후 위 주소 접속
+
+배포 전에 최소한 아래 값은 바꾸는 것을 권장합니다.
+
+- `src/data/site.ts`의 `owner`
+- `src/data/site.ts`의 `email`
+- `src/data/site.ts`의 `socials`

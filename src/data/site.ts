@@ -1,5 +1,8 @@
 const siteUrl =
-  (import.meta.env.PUBLIC_SITE_URL as string | undefined) ?? 'https://example.com';
+  (import.meta.env.PUBLIC_SITE_URL as string | undefined) ??
+  (import.meta.env.PROD
+    ? 'https://newrred.github.io'
+    : 'http://localhost:4321/');
 
 export const siteConfig = {
   owner: 'YOUR NAME',

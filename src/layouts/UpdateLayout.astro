@@ -3,6 +3,7 @@ import UpdateSidebar from '../components/UpdateSidebar.astro';
 import { AREA_META, KIND_META } from '../data/site';
 import type { UpdateEntry } from '../utils/updates';
 import { formatLongDate, getEntryCover } from '../utils/updates';
+import { withBase } from '../utils/paths';
 import BaseLayout from './BaseLayout.astro';
 
 interface Props {
@@ -22,7 +23,7 @@ const areaLine = entry.data.areas.map((area) => AREA_META[area].label).join(' / 
   <section class="page-section">
     <div class="container container--wide article-shell">
       <div class="article-shell__topline">
-        <a class="back-link" href="/archive/">아카이브로 돌아가기</a>
+        <a class="back-link" href={withBase('/archive/')}>아카이브로 돌아가기</a>
         <p class="mono-text">
           {KIND_META[entry.data.kind]} / {areaLine}
         </p>
