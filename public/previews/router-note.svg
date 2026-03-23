@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" fill="#151210"/>
+  <rect x="52" y="52" width="1096" height="796" rx="4" stroke="#3b332d"/>
+  <path d="M52 220H1148" stroke="#3b332d"/>
+  <path d="M420 52V848" stroke="#3b332d"/>
+  <path d="M52 640H1148" stroke="#3b332d"/>
+  <circle cx="94" cy="136" r="12" fill="#a6b78a"/>
+  <circle cx="130" cy="136" r="12" fill="#7b6d61"/>
+  <circle cx="166" cy="136" r="12" fill="#5e5348"/>
+  <text x="90" y="420" fill="#ece3d7" font-size="116" font-family="'IBM Plex Sans KR', 'IBM Plex Sans', sans-serif" font-weight="600">5G ROUTER</text>
+  <text x="90" y="500" fill="#a6b78a" font-size="36" font-family="'IBM Plex Mono', monospace">field memo / network</text>
+  <text x="90" y="120" fill="#b7aa9a" font-size="24" font-family="'IBM Plex Mono', monospace">preview</text>
+  <text x="90" y="710" fill="#b7aa9a" font-size="24" font-family="'IBM Plex Mono', monospace">update archive / experimental edition</text>
+  <text x="970" y="120" fill="#b7aa9a" font-size="24" font-family="'IBM Plex Mono', monospace">build</text>
+  <text x="962" y="710" fill="#ece3d7" font-size="88" font-family="'IBM Plex Sans KR', 'IBM Plex Sans', sans-serif" font-weight="600">01</text>
+</svg>

@@ -1,0 +1,217 @@
+---
+import ArchiveMatrix from '../components/ArchiveMatrix.astro';
+import CredentialsPanel from '../components/CredentialsPanel.astro';
+import LiveClockStrip from '../components/LiveClockStrip.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../data/site';
+import { formatDate, getEntryUrl, getPublishedUpdates, summarizeAreas } from '../utils/updates';
+
+const updates = await getPublishedUpdates();
+const latest = updates.slice(0, 8);
+const pinned = updates.filter((entry) => entry.data.pinned).slice(0, 4);
+const areas = summarizeAreas(updates);
+const current = updates[0] ?? null;
+const currentHref = current ? getEntryUrl(current) : '/archive/';
+---
+
+<BaseLayout
+  title={siteConfig.siteTitle}
+  description={siteConfig.description}
+  currentPath="/"
+>
+  <section class="page-section">
+    <div class="container container--wide hero-assembly">
+      <div class="hero-assembly__topline">
+        <p class="hero-assembly__eyebrow mono-text">update-led portfolio system</p>
+        <div class="hero-assembly__topmeta">
+          <span class="mono-text">build {current ? current.data.build : '-'}</span>
+          <span class="mono-text">records {updates.length}</span>
+          <span class="mono-text">areas {areas.length}</span>
+        </div>
+      </div>
+
+      <div class="hero-assembly__intro">
+        <p class="hero-assembly__kicker mono-text">{siteConfig.siteTitle}</p>
+        <div class="hero-assembly__mark" aria-hidden="true">
+          <img src="/media/8.png" alt="" loading="eager" />
+        </div>
+        <h1 class="sr-only">
+          <span>{siteConfig.owner}</span>
+          <span>Update</span>
+          <span>Archive</span>
+        </h1>
+        <p class="lead hero-assembly__lead">{siteConfig.shortBio}</p>
+        <p class="body-copy hero-assembly__body">{siteConfig.workingStatement}</p>
+
+        <ul class="hero-assembly__actions">
+          <li>
+            <a href={currentHref}>{current ? `${current.data.title} 보기` : '아카이브 보기'}</a>
+          </li>
+          <li>
+            <a href="/archive/">전체 기록 탐색</a>
+          </li>
+        </ul>
+
+        <dl class="status-list hero-assembly__status">
+          <div>
+            <dt>현재 빌드</dt>
+            <dd>{current ? current.data.build : '-'}</dd>
+          </div>
+          <div>
+            <dt>마지막 업데이트</dt>
+            <dd>{current ? formatDate(current.data.date) : '-'}</dd>
+          </div>
+          <div>
+            <dt>대표 문맥</dt>
+            <dd>{current ? current.data.credit ?? current.data.role ?? '-' : '-'}</dd>
+          </div>
+          <div>
+            <dt>연락 가능 범위</dt>
+            <dd>{siteConfig.availability}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="hero-assembly__side">
+        <section class="hero-note">
+          <p class="hero-note__label mono-text">live strip</p>
+          <LiveClockStrip items={siteConfig.timeZones} />
+          <ul class="plain-links">
+            {
+              siteConfig.socials.map((item) => (
+                <li>
+                  <a href={item.href} target="_blank" rel="noreferrer">
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="hero-current">
+          <p class="hero-note__label mono-text">current focus</p>
+          <h2>{current ? current.data.title : siteConfig.siteTitle}</h2>
+          <p>{current ? current.data.summary : siteConfig.description}</p>
+        </section>
+      </div>
+
+      <div class="hero-assembly__archive">
+        <div class="hero-assembly__archive-head">
+          <p class="mono-text">latest ledger</p>
+          <a href="/archive/">full archive</a>
+        </div>
+        <ArchiveMatrix entries={latest} showFilters={true} nested={true} />
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container container--wide editorial-band">
+      <section class="editorial-band__statement">
+        <p class="mono-text editorial-band__label">method</p>
+        <h2>완성본보다 판단의 흔적이 먼저 보이도록 구성합니다.</h2>
+        <p class="body-copy">
+          작업을 한 덩어리로 포장하지 않고, 수정과 실험과 메모를 같은 밀도로 쌓아두는 방식입니다.
+          그래서 포트폴리오가 결과물 진열장이 아니라 진행 중인 시스템처럼 보이게 합니다.
+        </p>
+
+        <ol class="ordered-list editorial-band__principles">
+          {
+            siteConfig.aiPrinciples.map((item) => (
+              <li>{item}</li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <section class="editorial-band__credentials">
+        <CredentialsPanel />
+      </section>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container container--wide dashboard-grid">
+      <section class="dashboard-grid__ledger">
+        <h2>분야 장부</h2>
+
+        <div class="table-wrap">
+          <table class="simple-table">
+            <thead>
+              <tr>
+                <th scope="col">분야</th>
+                <th scope="col">최신 빌드</th>
+                <th scope="col">기록</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {
+                areas.map((area) => (
+                  <tr>
+                    <td>
+                      <a href={`/areas/${area.slug}/`}>{area.label}</a>
+                    </td>
+                    <td>{area.latest ? area.latest.data.build : '-'}</td>
+                    <td>{area.count}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="dashboard-grid__records">
+        <div class="section-head section-head--tight">
+          <h2>대표 기록</h2>
+          <a href="/archive/">전체 보기</a>
+        </div>
+
+        <ul class="entry-list entry-list--compact feature-list">
+          {
+            pinned.map((entry, index) => (
+              <li>
+                <span class="feature-list__index mono-text">{String(index + 1).padStart(2, '0')}</span>
+                <div>
+                  <a class="entry-list__title" href={getEntryUrl(entry)}>
+                    {entry.data.title}
+                  </a>
+                  <p>{entry.data.summary}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section class="dashboard-grid__taxonomy">
+        <h2>기록 방식</h2>
+
+        <div class="table-wrap table-wrap--flat">
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <th scope="row">major</th>
+                <td>구조가 크게 달라졌거나 대표 작업이 추가됐을 때</td>
+              </tr>
+              <tr>
+                <th scope="row">minor</th>
+                <td>새 기능, 새 결과물, 새 작업 방식이 추가됐을 때</td>
+              </tr>
+              <tr>
+                <th scope="row">patch</th>
+                <td>디자인 수정, 구현 개선, 정리 작업처럼 품질을 다듬을 때</td>
+              </tr>
+              <tr>
+                <th scope="row">note</th>
+                <td>짧은 메모, 조사, 배운 내용을 남길 때</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</BaseLayout>

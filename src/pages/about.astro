@@ -1,0 +1,100 @@
+---
+import CredentialsPanel from '../components/CredentialsPanel.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { AREA_META, siteConfig } from '../data/site';
+---
+
+<BaseLayout
+  title="소개"
+  description={`${siteConfig.owner} 소개와 작업 방식`}
+  currentPath="/about/"
+>
+  <section class="page-section">
+    <div class="container container--wide about-editorial">
+      <div class="about-editorial__topline">
+        <p class="mono-text">about / practice</p>
+        <p class="mono-text">{siteConfig.roleLine}</p>
+      </div>
+
+      <div class="about-editorial__intro">
+        <h1>{siteConfig.owner}</h1>
+        <p class="lead">{siteConfig.shortBio}</p>
+        <p class="body-copy">{siteConfig.workingStatement}</p>
+      </div>
+
+      <section class="about-editorial__contact">
+        <p class="mono-text about-editorial__label">contact / scope</p>
+        <h2>연락과 가용 범위</h2>
+        <p class="body-copy">{siteConfig.availability}</p>
+
+        <ul class="link-list">
+          {
+            siteConfig.socials.map((item) => (
+              <li>
+                <a href={item.href} target="_blank" rel="noreferrer">
+                  {item.label}
+                </a>
+              </li>
+              ))
+            }
+          </ul>
+
+        <dl class="credentials-sheet about-editorial__facts">
+          {
+            siteConfig.facts.map((item) => (
+              <div>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container container--wide about-ledger">
+      <section class="about-ledger__areas">
+        <h2>다루는 범위</h2>
+
+        <div class="table-wrap table-wrap--flat">
+          <table class="simple-table">
+            <tbody>
+              {
+                Object.values(AREA_META).map((area) => (
+                  <tr>
+                    <th scope="row">{area.label}</th>
+                    <td>{area.description}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="about-ledger__principles">
+        <p class="mono-text about-editorial__label">principles</p>
+        <h2>AI 사용 원칙</h2>
+
+        <ol class="ordered-list">
+          {
+            siteConfig.aiPrinciples.map((item) => (
+              <li>{item}</li>
+            ))
+          }
+        </ol>
+      </section>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container container--wide">
+      <section class="about-editorial__credentials">
+        <p class="mono-text about-editorial__label">working model</p>
+        <CredentialsPanel />
+      </section>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,26 @@
+---
+import ArchiveMatrix from '../components/ArchiveMatrix.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedUpdates } from '../utils/updates';
+
+const updates = await getPublishedUpdates();
+---
+
+<BaseLayout
+  title="아카이브"
+  description="프로젝트, 메모, 조사, 수정 기록을 한곳에 모아둔 목록입니다."
+  currentPath="/archive/"
+>
+  <section class="page-section">
+    <div class="container container--wide page-head">
+      <h1>아카이브</h1>
+      <p class="lead">프로젝트, 메모, 조사, 수정 기록을 시간 순서대로 정리한 목록입니다.</p>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container container--wide">
+      <ArchiveMatrix entries={updates} showFilters={true} />
+    </div>
+  </section>
+</BaseLayout>

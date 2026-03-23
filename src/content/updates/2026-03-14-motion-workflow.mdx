@@ -1,0 +1,42 @@
+---
+title: "모션 작업 전달 구조 정리"
+summary: "영상 편집과 UI 시안을 같이 보여줄 때 클립, 썸네일, 설명 순서를 통일했습니다."
+date: "2026-03-14"
+build: "2026.03.14"
+kind: "minor"
+areas:
+  - video
+  - design
+role: "편집 구조, 화면 설계"
+credit: "Presentation workflow"
+cover: "/previews/motion-workflow.svg"
+stack:
+  - Premiere Pro
+  - After Effects
+assist:
+  - 체크리스트 정리
+pinned: true
+draft: false
+---
+
+import MediaFigure from '../../components/MediaFigure.astro';
+
+## 문제
+
+작업 결과물을 보여줄 때 영상만 두면 맥락이 약했고, 설명만 길어지면 집중이 떨어졌습니다.
+
+## 적용한 방식
+
+- 첫 화면에서는 10초 안에 이해되는 컷만 보여줍니다.
+- 아래에는 작업 맥락, 맡은 역할, 수정 포인트를 짧게 적습니다.
+- 긴 설명은 상세 페이지로 보내고, 목록 화면은 판단 속도가 빠르게 유지되도록 정리했습니다.
+
+<MediaFigure
+  src="/media/motion-workflow-example.png"
+  alt="네온 핑크와 그린 톤의 바이크 컨셉 일러스트"
+  caption="MDX 본문에 이미지를 넣는 예시"
+/>
+
+## 기대 효과
+
+포트폴리오를 보는 사람이 "예쁘다"에서 멈추지 않고, 어떤 기준으로 구성했는지 빠르게 이해할 수 있습니다.

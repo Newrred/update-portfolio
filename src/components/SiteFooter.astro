@@ -1,0 +1,27 @@
+---
+import { siteConfig } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="container container--wide footer-grid">
+    <div>
+      <p class="footer-title">{siteConfig.owner}</p>
+      <p class="footer-copy">{siteConfig.workingStatement}</p>
+    </div>
+
+    <ul class="footer-links">
+      {
+        siteConfig.socials.map((item) => (
+          <li>
+            <a href={item.href} target="_blank" rel="noreferrer">
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href="/feed.xml">RSS</a>
+      </li>
+    </ul>
+  </div>
+</footer>

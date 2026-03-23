@@ -1,0 +1,175 @@
+---
+import { AREA_META, KIND_META } from '../data/site';
+import {
+  formatDate,
+  formatYear,
+  getEntryCover,
+  getEntryCredit,
+  getEntryUrl,
+  type UpdateEntry,
+} from '../utils/updates';
+
+interface Props {
+  entries: UpdateEntry[];
+  showFilters?: boolean;
+  nested?: boolean;
+}
+
+const { entries, showFilters = true, nested = false } = Astro.props;
+const filterAreas = Object.entries(AREA_META).filter(([slug]) =>
+  entries.some((entry) => entry.data.areas.includes(slug as keyof typeof AREA_META)),
+);
+const first = entries[0] ?? null;
+---
+
+{
+  entries.length > 0 ? (
+    <div class:list={['matrix', nested && 'matrix--nested']} data-archive-matrix>
+      {
+        showFilters && (
+          <div class="matrix-filters" role="toolbar" aria-label="분야 필터">
+            <button class="matrix-filter is-active" type="button" data-filter="all" aria-pressed="true">
+              전체
+            </button>
+            {
+              filterAreas.map(([slug, meta]) => (
+                <button class="matrix-filter" type="button" data-filter={slug} aria-pressed="false">
+                  {meta.label}
+                </button>
+              ))
+            }
+          </div>
+        )
+      }
+
+      <div class="matrix-grid">
+        <ol class="matrix-list">
+          {
+            entries.map((entry, index) => {
+              const sideMeta = [
+                getEntryCredit(entry),
+                formatYear(entry.data.date),
+                entry.data.areas.map((area) => AREA_META[area].label).join(' · '),
+              ].join(' · ');
+
+              const previewMeta = [
+                entry.data.build,
+                KIND_META[entry.data.kind],
+                formatDate(entry.data.date),
+              ].join(' · ');
+
+              return (
+                <li class="matrix-item" data-areas={entry.data.areas.join(' ')}>
+                  <a
+                    class:list={['matrix-link', index === 0 && 'is-current']}
+                    href={getEntryUrl(entry)}
+                    data-preview={getEntryCover(entry)}
+                    data-title={entry.data.title}
+                    data-summary={entry.data.summary}
+                    data-meta={previewMeta}
+                  >
+                    <span class="matrix-index mono-text">{String(index + 1).padStart(2, '0')}</span>
+                    <span class="matrix-main">
+                      <strong>{entry.data.title}</strong>
+                      <span>{entry.data.summary}</span>
+                    </span>
+                    <span class="matrix-side mono-text">{sideMeta}</span>
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ol>
+
+        {first && (
+          <aside class="matrix-preview" aria-live="polite">
+            <div class="matrix-preview__media">
+              <img
+                src={getEntryCover(first)}
+                alt={first.data.title}
+                loading="eager"
+                data-preview-image
+              />
+            </div>
+            <div class="matrix-preview__body">
+              <p class="matrix-preview__meta mono-text" data-preview-meta>
+                {[first.data.build, KIND_META[first.data.kind], formatDate(first.data.date)].join(' · ')}
+              </p>
+              <h2 data-preview-title>{first.data.title}</h2>
+              <p data-preview-summary>{first.data.summary}</p>
+            </div>
+          </aside>
+        )}
+      </div>
+    </div>
+  ) : (
+    <p class="empty-state">아직 공개된 업데이트가 없습니다.</p>
+  )
+}
+
+<script>
+  const matrices = document.querySelectorAll('[data-archive-matrix]');
+
+  matrices.forEach((matrix) => {
+    const links = Array.from(matrix.querySelectorAll('.matrix-link'));
+    const items = Array.from(matrix.querySelectorAll('.matrix-item'));
+    const buttons = Array.from(matrix.querySelectorAll('.matrix-filter'));
+    const image = matrix.querySelector('[data-preview-image]');
+    const title = matrix.querySelector('[data-preview-title]');
+    const summary = matrix.querySelector('[data-preview-summary]');
+    const meta = matrix.querySelector('[data-preview-meta]');
+
+    const activate = (link) => {
+      if (!(link instanceof HTMLElement)) return;
+
+      links.forEach((item) => {
+        item.classList.toggle('is-current', item === link);
+      });
+
+      if (image instanceof HTMLImageElement) {
+        const nextSrc = link.dataset.preview;
+        const nextAlt = link.dataset.title;
+
+        if (nextSrc) image.src = nextSrc;
+        if (nextAlt) image.alt = nextAlt;
+      }
+
+      if (title) title.textContent = link.dataset.title ?? '';
+      if (summary) summary.textContent = link.dataset.summary ?? '';
+      if (meta) meta.textContent = link.dataset.meta ?? '';
+    };
+
+    links.forEach((link) => {
+      link.addEventListener('mouseenter', () => activate(link));
+      link.addEventListener('focus', () => activate(link));
+    });
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!(button instanceof HTMLElement)) return;
+        const filter = button.dataset.filter;
+        let firstVisible = null;
+
+        buttons.forEach((item) => {
+          const isCurrent = item === button;
+          item.classList.toggle('is-active', isCurrent);
+          item.setAttribute('aria-pressed', String(isCurrent));
+        });
+
+        items.forEach((item) => {
+          if (!(item instanceof HTMLElement)) return;
+
+          const areas = (item.dataset.areas ?? '').split(' ').filter(Boolean);
+          const visible = !filter || filter === 'all' || areas.includes(filter);
+          item.hidden = !visible;
+
+          if (visible && !firstVisible) {
+            firstVisible = item.querySelector('.matrix-link');
+          }
+        });
+
+        if (firstVisible) activate(firstVisible);
+      });
+    });
+  });
+</script>

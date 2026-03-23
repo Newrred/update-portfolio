@@ -1,0 +1,59 @@
+---
+import { AREA_META, KIND_META } from '../data/site';
+import { formatDate, getEntryCredit, getEntryUrl, type UpdateEntry } from '../utils/updates';
+
+interface Props {
+  entries: UpdateEntry[];
+  showSummary?: boolean;
+}
+
+const { entries, showSummary = true } = Astro.props;
+---
+
+{
+  entries.length > 0 ? (
+    <div class="table-wrap">
+      <table class="update-table">
+        <thead>
+          <tr>
+            <th scope="col">Build</th>
+            <th scope="col">Type</th>
+            <th scope="col">Context</th>
+            <th scope="col">Title</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {
+            entries.map((entry) => (
+              <tr>
+                <td data-label="Build">
+                  <span class="mono-text">{entry.data.build}</span>
+                </td>
+                <td data-label="Type">
+                  <span class="mono-text">{KIND_META[entry.data.kind]}</span>
+                </td>
+                <td data-label="Context">
+                  {getEntryCredit(entry)}
+                  <p class="table-summary">
+                    {entry.data.areas.map((area) => AREA_META[area].label).join(', ')}
+                  </p>
+                </td>
+                <td data-label="Title">
+                  <a class="table-title" href={getEntryUrl(entry)}>
+                    {entry.data.title}
+                  </a>
+                  {showSummary && <p class="table-summary">{entry.data.summary}</p>}
+                </td>
+                <td data-label="Date">{formatDate(entry.data.date)}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p class="empty-state">아직 공개된 업데이트가 없습니다.</p>
+  )
+}

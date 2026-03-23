@@ -1,0 +1,26 @@
+---
+interface Props {
+  src: string;
+  title: string;
+  caption?: string;
+  poster?: string;
+}
+
+const { src, title, caption, poster } = Astro.props;
+---
+
+<figure class="video-player">
+  <video
+    class="video-player__frame"
+    src={src}
+    poster={poster}
+    controls
+    playsinline
+    preload="metadata"
+    aria-label={title}
+  >
+    비디오를 재생할 수 없습니다.
+  </video>
+
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

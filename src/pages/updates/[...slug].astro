@@ -1,0 +1,27 @@
+---
+import { render } from 'astro:content';
+import UpdateLayout from '../../layouts/UpdateLayout.astro';
+import {
+  findRelatedUpdates,
+  getPublishedUpdates,
+  type UpdateEntry,
+} from '../../utils/updates';
+
+export async function getStaticPaths() {
+  const updates = await getPublishedUpdates();
+
+  return updates.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props as { entry: UpdateEntry };
+const allUpdates = await getPublishedUpdates();
+const related = findRelatedUpdates(allUpdates, entry, 3);
+const { Content } = await render(entry);
+---
+
+<UpdateLayout entry={entry} related={related}>
+  <Content />
+</UpdateLayout>

@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  color-scheme: dark;
+
+  --bg: #000;
+  --surface: #000;
+  --surface-2: #000;
+  --surface-3: #000;
+  --surface-soft: #000;
+  --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.4);
+  --text: #fff;
+  --text-muted: rgba(255, 255, 255, 0.72);
+  --text-faint: rgba(255, 255, 255, 0.44);
+  --accent: #fff;
+  --accent-strong: #fff;
+  --accent-soft: rgba(255, 255, 255, 0.08);
+  --success: #fff;
+  --danger: #fff;
+
+  --radius-button: 0;
+  --radius-input: 0;
+  --radius-panel: 0;
+  --radius-frame: 0;
+  --shadow-card: none;
+
+  --font-display: 'Space Grotesk', 'IBM Plex Sans KR', sans-serif;
+  --font-sans: 'IBM Plex Sans KR', 'Space Grotesk', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --text-body: 16px;
+  --leading-body: 1.58;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+  --space-9: 64px;
+  --space-10: 88px;
+
+  --container: 1480px;
+  --border-base: 1px solid var(--line);
+}

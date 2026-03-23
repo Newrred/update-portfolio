@@ -1,0 +1,56 @@
+---
+interface Item {
+  label: string;
+  zone: string;
+}
+
+interface Props {
+  items: readonly Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="clock-strip" data-clock-root>
+  {
+    items.map((item) => (
+      <li class="clock-strip__item">
+        <span class="mono-text" data-clock-item data-label={item.label} data-zone={item.zone}>
+          {item.label} --:--:--
+        </span>
+      </li>
+    ))
+  }
+</ul>
+
+<script>
+  const roots = document.querySelectorAll('[data-clock-root]');
+
+  roots.forEach((root) => {
+    const items = root.querySelectorAll('[data-clock-item]');
+
+    const update = () => {
+      items.forEach((item) => {
+        if (!(item instanceof HTMLElement)) return;
+
+        const zone = item.dataset.zone;
+        const label = item.dataset.label;
+
+        if (!zone || !label) return;
+
+        const formatter = new Intl.DateTimeFormat('ko-KR', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+          timeZone: zone,
+        });
+
+        item.textContent = `${label} ${formatter.format(new Date())}`;
+      });
+    };
+
+    update();
+    window.setInterval(update, 1000);
+  });
+</script>

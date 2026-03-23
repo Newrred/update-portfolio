@@ -1,0 +1,53 @@
+---
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { siteConfig } from '../data/site';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/layout.css';
+import '../styles/components.css';
+import '../styles/prose.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const {
+  title = siteConfig.owner,
+  description = siteConfig.description,
+  currentPath = Astro.url.pathname,
+} = Astro.props;
+
+const pageTitle = title === siteConfig.owner ? title : `${title} | ${siteConfig.owner}`;
+const canonical = new URL(Astro.url.pathname, siteConfig.url).toString();
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      href="/feed.xml"
+      title={`${siteConfig.owner} updates`}
+    />
+  </head>
+
+  <body>
+    <SiteHeader currentPath={currentPath} />
+
+    <main class="site-main">
+      <slot />
+    </main>
+
+    <SiteFooter />
+  </body>
+</html>

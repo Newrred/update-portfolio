@@ -1,0 +1,42 @@
+---
+import ArchiveMatrix from '../../components/ArchiveMatrix.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { AREA_META, type AreaSlug } from '../../data/site';
+import { getPublishedUpdates } from '../../utils/updates';
+
+export async function getStaticPaths() {
+  const updates = await getPublishedUpdates();
+  const slugs = [...new Set(updates.flatMap((entry) => entry.data.areas))];
+
+  return slugs.map((slug) => ({
+    params: { slug },
+    props: { slug },
+  }));
+}
+
+const { slug } = Astro.props as { slug: AreaSlug };
+const meta = AREA_META[slug];
+const updates = (await getPublishedUpdates()).filter((entry) =>
+  entry.data.areas.includes(slug),
+);
+---
+
+<BaseLayout
+  title={meta.label}
+  description={meta.description}
+  currentPath="/archive/"
+>
+  <section class="page-section">
+    <div class="container container--wide page-head">
+      <a class="back-link" href="/archive/">아카이브로 돌아가기</a>
+      <h1>{meta.label}</h1>
+      <p class="lead">{meta.description}</p>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container container--wide">
+      <ArchiveMatrix entries={updates} showFilters={false} />
+    </div>
+  </section>
+</BaseLayout>

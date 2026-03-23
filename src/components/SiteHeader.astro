@@ -1,0 +1,40 @@
+---
+import { NAV_ITEMS, siteConfig } from '../data/site';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+
+function isActive(href: string) {
+  if (href === '/') {
+    return currentPath === '/';
+  }
+
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="site-header">
+  <div class="container container--wide topbar">
+    <a class="brand" href="/">
+      <strong>{siteConfig.owner}</strong>
+      <span>{siteConfig.roleLine}</span>
+    </a>
+
+    <nav class="site-nav" aria-label="주요 이동">
+      {
+        NAV_ITEMS.map((item) => (
+          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="topbar-meta">
+      <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+    </div>
+  </div>
+</header>
